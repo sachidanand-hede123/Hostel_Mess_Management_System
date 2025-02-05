@@ -55,7 +55,7 @@ The *Hostel Mess Management System* is an innovative, token-based meal managemen
 
 
 ## 📩 Contact
-For any queries, feel free to contact us via [GitHub Issues](https://github.com/Sanganna01/Hostel-Mess-Management-System/issues) or email.
+For any queries, feel free to contact us via [GitHub Issues](https://github.com/sachidanand-hede123/Hostel_Mess_Management_System/issues) or email.
 
 ---
 
@@ -68,29 +68,33 @@ For any queries, feel free to contact us via [GitHub Issues](https://github.com/
 
 ---
 
-## Steps to Run
+Steps to Run
 
-1. *Import Database*:
-   - Import db.sql in MySQL to create the database and necessary tables.
+Import Database:
 
-2. *Download npm Dependencies*:
-   - Run the following command in your project folder to install all the required dependencies from the package.json file:
-     
-     npm install
-     
+Import db.sql in MySQL to create the database and necessary tables.
 
-3. *Configure MySQL Credentials*:
-   - Update your MySQL username and password in the db.js file to ensure proper database connection.
+Download npm Dependencies:
 
-4. *Start the Server*:
-   - Open the terminal and enter the following command to start the server:
-     
-     npm start
-     
-   - Ensure that MySQL is running before starting the server.
+Run the following command in your project folder to install all the required dependencies from the package.json file:
 
-5. *Start Frontend*:
-   - Once the server is running, navigate to the frontend folder, open index.html, and use the "Go Live" feature in your editor to view the frontend.
+npm install
+
+Configure MySQL Credentials:
+
+Update your MySQL username and password in the db.js file to ensure proper database connection.
+
+Start the Server:
+
+Open the terminal and enter the following command to start the server:
+
+npm start server
+
+Ensure that MySQL is running before starting the server.
+
+Start Frontend:
+
+Once the server is running, navigate to the frontend folder, open index.html, and use the "Go Live" feature in your editor to view the frontend.
 
 For more details, visit the [GitHub repository](https://github.com/sachidanand-hede123/Hostel_Mess_Management_System).
 
@@ -101,4 +105,4 @@ For more details, visit the [GitHub repository](https://github.com/sachidanand-h
 
 
 
-For more details, visit the [GitHub repository](https://github.com/Sanganna01/Hostel-Mess-Management-System).
+
