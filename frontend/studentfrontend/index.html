@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="style.css">
+    <title> RVCE Hostel Mess</title>
+</head>
+<body>
+    <nav>
+        <div class="wrapper">
+            <div class="nav-container">
+                <!-- Add the logo -->
+                <img src="images/rvlogo.png" alt="RVCE Logo" class="logo">
+                
+                <!-- Links aligned to the right -->
+                <div class="links">
+                    <a href="">Home</a>
+                    <a href="menu.html">Menu</a>
+                    <a href="inv.html">Bill</a>
+                    <a href="feedback.html">Feedback</a>
+                    <a href="profile.html">Profile</a>
+                    <a href="../index.html">Sign Out</a>
+
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+
+<!-- Landing Page -->
+<section class="landingpage">
+    <div class="content">
+        <div class="heading" data-aos="fade-right" data-aos-duration="2000">
+            <h3>Welcome to hostel mess</h3>
+            <h1>Freshness <br> in every bite</h1>
+            <p>Click here to generate token for food.</p>
+            <button class="recipe-button" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="00" onclick="window.location.href='tok.html';">
+                Have food
+            </button>
+            
+        </div>           
+        <div class="image">
+            <img src="images/main.png" data-aos="zoom-in" data-aos-duration="2000">
+        </div>
+    </div>
+</section>
+
+<section class="details-foods">
+    <div class="title"><h1 data-aos="fade-left" data-aos-duration="1000">Today's Menu</h1></div>
+    <div id="todays-menu" class="foods">
+        <!-- Dynamic menu will be inserted here -->
+    </div>
+</section>
+
+
+
+<section class="aboutus">
+    <div class="container">
+        <div class="aboutus-content">
+            <h1 data-aos="fade-left" data-aos-duration="1000">About us</h1>
+            <h2 data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">Team</h2>
+            <p data-aos="fade-left" data-aos-duration="1000" data-aos-delay="400" style="text-align: center;">Sachidanand N Hede - 1RV22IS053</p>
+            <p data-aos="fade-left" data-aos-duration="1000" data-aos-delay="600" style="text-align: center;">Sanganna Motgi - 1RV22IS056</p>
+        </div>
+    </div>
+</section>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script>
+    AOS.init();
+    async function fetchTodaysMenu() {
+        try {
+            // Fetch today's menu from the server
+            const response = await fetch('http://localhost:8000/api/todays-menu');
+            const menu = await response.json();
+
+            if (response.ok) {
+                const menuContainer = document.getElementById('todays-menu');
+                menuContainer.innerHTML = `
+                    <div class="card" data-aos="fade-up" data-aos-duration="1000">
+                        <img src="images/salad.png" alt="Breakfast">
+                        <div class="discription">
+                            <h1>Breakfast</h1>
+                            <p>${menu.breakfast}</p>
+                        </div>
+                    </div>
+                    <div class="card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                        <img src="images/salad1.png" alt="Lunch">
+                        <div class="discription">
+                            <h1>Lunch</h1>
+                            <p>${menu.lunch}</p>
+                        </div>
+                    </div>
+                    <div class="card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                        <img src="images/salad2.png" alt="High Tea">
+                        <div class="discription">
+                            <h1>High Tea</h1>
+                            <p>${menu.high_tea}</p>
+                        </div>
+                    </div>
+                    <div class="card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+                        <img src="images/salad3.png" alt="Dinner">
+                        <div class="discription">
+                            <h1>Dinner</h1>
+                            <p>${menu.dinner}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                console.error('Error fetching menu:', menu.error);
+                alert('Could not fetch today\'s menu. Please try again later.');
+            }
+        } catch (error) {
+            console.error('Error fetching menu:', error);
+        }
+    }
+
+    // Fetch today's menu on page load
+    fetchTodaysMenu();
+</script>
+
+</body>
+</html>

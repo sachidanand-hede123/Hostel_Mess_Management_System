@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; /* Stack elements vertically */
+            height: 100vh;
+        }
+        a {
+            position: absolute; /* Place it relative to the viewport */
+            top: 20px; /* Adjust vertical position */
+            right: 20px; /* Adjust horizontal position */
+            text-decoration: none;
+            color: #007bff;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        img {
+            margin-top: 10px;
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .error {
+            color: red;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html">Sign Out</a>
+    <div class="container" id="ticketContainer">
+        <h2>Meal Ticket</h2>
+        <p><strong>Name:</strong> <span id="name"></span></p>
+        <p><strong>USN:</strong> <span id="ticketUsn"></span></p>
+        <p><strong>Meal Type:</strong> <span id="ticketMealType"></span></p>
+        <p><strong>Date:</strong> <span id="date"></span></p>
+        <img id="qrCode" src="" alt="QR Code" />
+        <div class="error" id="error" style="display: none;"></div>
+    </div>
+    <script>
+        async function fetchTicket() {
+            // Retrieve usn and mealType from localStorage
+            const usn = localStorage.getItem('usn');
+            const mealType = localStorage.getItem('selectedMeal');
+
+            console.log('USN:', usn); // Check the retrieved USN
+            console.log('Meal Type:', mealType);
+            if (!usn || !mealType) {
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'USN or Meal Type not found in local storage.';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8000/api/generate-ticket', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usn, mealType }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Populate ticket details
+                    document.getElementById('name').textContent = data.ticket.Name;
+                    document.getElementById('ticketUsn').textContent = data.ticket.USN;
+                    document.getElementById('ticketMealType').textContent = data.ticket.MealType;
+                    document.getElementById('date').textContent = data.ticket.Date;
+                    document.getElementById('qrCode').src = data.ticket.QRCode;
+                } else {
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').textContent = data.error || 'Failed to fetch ticket.';
+                }
+            } catch (error) {
+                console.error('Error fetching ticket:', error);
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'Something went wrong. Please try again later.';
+            }
+        }
+
+        // Fetch ticket details on page load
+        window.onload = fetchTicket;
+    </script>
+</body>
+</html>

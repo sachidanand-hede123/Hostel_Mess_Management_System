@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #f3f3f3, #e2e2e2);
+            color: #333;
+        }
+
+        .invoice {
+            width: 70%;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: black;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .invoice-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .invoice-header .invoice-number {
+            text-align: right;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .nav-buttons button {
+            background: #555;
+            color: white;
+            padding: 10px 15px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-buttons button:hover {
+            background: #333;
+        }
+
+        .billing-info {
+            margin: 20px 0;
+        }
+
+        .billing-info h3 {
+            margin-bottom: 5px;
+            font-size: 20px;
+            color: #555;
+        }
+
+        .product-list {
+            margin-bottom: 20px;
+        }
+
+        .product-list-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            background: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-item:hover {
+            background: #f9f9f9;
+        }
+
+        .totals {
+            text-align: right;
+        }
+
+        .totals div {
+            padding: 10px 0;
+            font-size: 16px;
+        }
+
+        .totals div strong {
+            color: #333;
+        }
+
+        .terms {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .terms p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        button {
+            background: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        @media (max-width: 768px) {
+            .invoice {
+                width: 90%;
+            }
+
+            .invoice-header h1 {
+                font-size: 20px;
+            }
+
+            .product-list-header, .product-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .product-list-header div, .product-item div {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <button>Home</button>
+        <button>Sign Out</button>
+    </div>
+
+    <div class="invoice" id="invoice">
+        <div class="invoice-header">
+            <h1>INVOICE</h1>
+            <div class="invoice-number">
+                <p>INVOICE #</p>
+                <p id="invoice-number">00000A</p>
+            </div>
+        </div>
+
+        <div class="billing-info">
+            <h3>HOSTEL MESS MANAGEMENT</h3>
+            <p><strong>BILLING TO:</strong></p>
+            <p id="student-name">Loading...</p>
+            <p><strong>USN:</strong> <span id="student-usn">Loading...</span></p>
+        </div>
+
+        <div class="product-list">
+            <div class="product-list-header">
+                <div>Token</div>
+                <div>PRICE</div>
+                <div>QTY</div>
+                <div>TOTAL</div>
+            </div>
+            <div class="product-item">
+                <div>Breakfast</div>
+                <div>₹30.00</div>
+                <div id="breakfast-qty">0</div>
+                <div id="breakfast-total">₹0.00</div>
+            </div>
+            <div class="product-item">
+                <div>Lunch</div>
+                <div>₹40.00</div>
+                <div id="lunch-qty">0</div>
+                <div id="lunch-total">₹0.00</div>
+            </div>
+            <div class="product-item">
+                <div>Hi Tea</div>
+                <div>₹20.00</div>
+                <div id="hitea-qty">0</div>
+                <div id="hitea-total">₹0.00</div>
+            </div>
+            <div class="product-item">
+                <div>Dinner</div>
+                <div>₹40.00</div>
+                <div id="dinner-qty">0</div>
+                <div id="dinner-total">₹0.00</div>
+            </div>
+        </div>
+
+        <div class="totals">
+            <div>SUB TOTAL: <span id="subtotal">₹0.00</span></div>
+            <div><strong>TOTAL: <span id="total">₹0.00</span></strong></div>
+        </div>
+
+        <div class="terms">
+            <p><strong>ALL RIGHTS RESERVED 2025 ©</strong></p>
+        </div>
+    </div>
+    <button onclick="downloadInvoice()">Download Invoice</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const usn = localStorage.getItem('usn');
+            document.getElementById('student-usn').innerText = usn;
+
+            try {
+                // Fetch student details
+                const studentRes = await fetch(`/api/student/${usn}`);
+                const student = await studentRes.json();
+                document.getElementById('student-name').innerText = student.Name;
+
+                // Fetch token details
+                const tokenRes = await fetch(`/api/tokens/${usn}`);
+                const tokens = await tokenRes.json();
+
+                const { breakfast, lunch, hitea, dinner, total } = tokens;
+
+                document.getElementById('breakfast-qty').innerText = breakfast.qty;
+                document.getElementById('breakfast-total').innerText = `₹${breakfast.total}`;
+                document.getElementById('lunch-qty').innerText = lunch.qty;
+                document.getElementById('lunch-total').innerText = `₹${lunch.total}`;
+                document.getElementById('hitea-qty').innerText = hitea.qty;
+                document.getElementById('hitea-total').innerText = `₹${hitea.total}`;
+                document.getElementById('dinner-qty').innerText = dinner.qty;
+                document.getElementById('dinner-total').innerText = `₹${dinner.total}`;
+                document.getElementById('subtotal').innerText = `₹${total}`;
+                document.getElementById('total').innerText = `₹${total}`;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+
+        function downloadInvoice() {
+            const doc = new jspdf.jsPDF();
+            doc.html(document.querySelector('#invoice'), {
+                callback: function (doc) {
+                    doc.save('invoice.pdf');
+                },
+            });
+        }
+    </script>
+</body>
+</html>

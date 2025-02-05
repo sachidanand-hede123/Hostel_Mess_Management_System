@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feeling Hungry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bookman+Old+Style:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tok.css">
+  <style>
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .dropdown button {
+      width: 100%;
+      background-color: #a8bdbd;
+      color: rgb(88, 117, 114);
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      border-radius: 4px;
+    }
+
+    .dropdown button:after {
+      content: '\25BC';
+      float: right;
+      margin-left: 10px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #a8bdbd;
+      min-width: 100%;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      border-radius: 4px;
+    }
+
+    .dropdown-content button {
+      background-color: #a8bdbd;
+      color: black;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .dropdown-content button:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .radio-container {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .radio-container label {
+      font-size: 18px;
+    }
+
+    .radio-container input {
+      width: 25px;
+      height: 25px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Buttons -->
+  <div class="top-buttons">
+    <button class="top-button">Home</button>
+    <button class="top-button">Sign Out</button>
+  </div>
+
+  <div class="background">
+    <h1 class="main-heading"> Book Token</h1>
+    <div class="book">
+      <!-- Left Page -->
+      <div class="left-page">
+        <div class="logo">
+          <span>Feeling</span>
+          <span class="typing-effect">Hungry?</span>
+        </div>
+        <div class="dropdown">
+          <button id="meal-type-btn">Choose Meal Type</button>
+          <div class="dropdown-content" id="meal-options">
+            <button onclick="selectMeal('Breakfast')">Breakfast</button>
+            <button onclick="selectMeal('Lunch')">Lunch</button>
+            <button onclick="selectMeal('High Tea')">High Tea</button>
+            <button onclick="selectMeal('Dinner')">Dinner</button>
+          </div>
+        </div>
+        <div class="button-container">
+          <button class="generate-token-btn" onclick="generateToken()">Generate Token</button>
+        </div>
+        <p id="success-message" class="hidden"></p>
+      </div>
+
+      <!-- Right Page -->
+      <div class="right-page">
+        <div class="right-card-content">
+          <h1 class="right-card-heading">Are you<br>sick?</h1>
+
+          <!-- Radio buttons for Yes or No -->
+          <div class="radio-container">
+            <label><input type="radio" name="sick-option" value="Yes" onclick="handleSickOption('Yes')"> Yes</label>
+            <label><input type="radio" name="sick-option" value="No" onclick="handleSickOption('No')"> No</label>
+          </div>
+
+          <!-- Button first, then message below -->
+          <div class="button-container hidden" id="delivery-container">
+            <button class="delivery-button" onclick="showDeliveryMessage()">Delivery</button>
+          </div>
+          
+          <!-- The message for delivery will be displayed after clicking -->
+          <p id="delivery-message" class="hidden"></p>
+          <p id="grab-token-message" class="hidden">
+            Grab your token below and enjoy your meal! 🍽️
+          </p>
+          <div class="button-container" id="get-token-container">
+            <button class="secondary-button" onclick="location.href='gettoken.html';">Get Token</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedMeal = '';
+
+    function selectMeal(meal) {
+      selectedMeal = meal;
+      localStorage.setItem('selectedMeal', meal);
+      const mealTypeBtn = document.getElementById("meal-type-btn");
+      mealTypeBtn.textContent = `Meal Type: ${meal}`;
+    }
+
+    function generateToken() {
+      const successMessage = document.getElementById("success-message");
+
+      if (!selectedMeal) {
+        alert("Please select a meal type first!");
+        return;
+      }
+
+      successMessage.innerHTML = ` 
+        <strong>Your meal awaits! 🍕</strong><br>
+        <span>Meal Type: ${selectedMeal}</span><br>
+        <span>Get ready to indulge in a delicious treat.</span><br>
+        <span>Scan your token to enjoy your meal! 🍽️</span>
+      `;
+
+      successMessage.classList.remove("hidden");
+    }
+
+    function handleSickOption(option) {
+      const deliveryContainer = document.getElementById("delivery-container");
+      const grabTokenMessage = document.getElementById("grab-token-message");
+      const deliveryMessage = document.getElementById("delivery-message");
+
+      if (option === 'Yes') {
+        deliveryContainer.classList.remove("hidden");
+        grabTokenMessage.classList.add("hidden");
+        deliveryMessage.classList.add("hidden");
+      } else if (option === 'No') {
+        deliveryContainer.classList.add("hidden");
+        grabTokenMessage.classList.remove("hidden");
+        deliveryMessage.classList.add("hidden");
+      }
+    }
+
+    function showDeliveryMessage() {
+      const deliveryMessage = document.getElementById("delivery-message");
+
+      if (!selectedMeal) {
+        alert("Please select a meal type first!");
+        return;
+      }
+
+      // Get USN from localStorage
+      const usn = localStorage.getItem("usn");
+      if (!usn) {
+        alert("USN not found in local storage. Please log in.");
+        return;
+      }
+
+      // Send data to the backend
+      const mealType = selectedMeal;
+      const deliveryStatus = true; // Because the user clicked 'Delivery'
+      const date = new Date().toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/').reverse().join('-'); // Current date in YYYY-MM-DD format
+
+      const sendDeliveryData = async (usn, mealType, date) => {
+        try {
+          const response = await fetch('http://localhost:8000/delivery', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              usn,
+              meal_type: mealType,
+              date,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Error saving delivery info');
+          }
+
+          deliveryMessage.innerHTML = `
+            <span>Don't worry, your meal will be delivered to your room. 🚚</span><br>
+            <span>Meal Type: ${mealType}</span><br>
+            <span>Relax and get ready for your delicious meal to arrive soon!</span>
+          `;
+          deliveryMessage.classList.remove("hidden");
+        } catch (error) {
+          console.error('Error saving delivery info:', error);
+          alert("There was an error processing your request. Please try again.");
+        }
+      };
+
+      sendDeliveryData(usn, mealType, date);
+    }
+  </script>
+</body>
+</html>

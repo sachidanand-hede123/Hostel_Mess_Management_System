@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Mess Management System</title>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('food.jpeg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Background Overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        /* Login Container */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .role-selection {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .role-selection label {
+            display: inline-block;
+            margin-right: 20px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .role-selection input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <div class="role-selection">
+                <label>
+                    <input type="radio" name="role" value="student" required> Student
+                </label>
+                <label>
+                    <input type="radio" name="role" value="warden" required> Warden
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="usn">USN</label>
+                <input type="text" id="usn" name="usn" placeholder="Enter your USN" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+    </div>
+    <footer>
+        <p>&copy; 2025 Mess Management System. All rights reserved.</p>
+    </footer>
+    <script>
+        const form = document.getElementById('loginForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('http://localhost:8000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                alert('Login successful!');
+                console.log(result);
+                const usn = result.user.Student_usn; // Assuming `Student_usn` is part of the response
+
+                // Save USN in local storage
+                localStorage.setItem('usn', usn);
+
+                // Redirect to the correct page based on role
+                if (data.role === 'student') {
+                    window.location.href = 'studentfrontend/index.html';
+                } else if (data.role === 'warden') {
+                    window.location.href = 'wardenfrontend/war.html';
+                }
+            }
+
+                else {
+                    alert(result.error || 'Login failed!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong.');
+            }
+        });
+    </script>
+</body>
+</html>

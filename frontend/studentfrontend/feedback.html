@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Feedback</title>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            background-color: #121212; /* Dark theme background */
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Feedback Card */
+        .feedback-card {
+            background: rgba(255, 255, 255, 0.1); /* Translucent black */
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        label {
+            font-size: 1rem;
+        }
+
+        textarea, input {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #2e2e2e;
+            color: #fff;
+        }
+
+        textarea::placeholder {
+            color: #888;
+        }
+
+        /* Star Rating */
+        .rating {
+            display: flex;
+            justify-content: flex-start; /* Align stars left-to-right */
+            margin-bottom: 20px;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            font-size: 30px;
+            color: #c4c40f;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .rating input:checked ~ label,
+        .rating input:checked ~ label ~ label {
+            color: #8e8a85; /* Gold for selected stars */
+        }
+
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #847d73; /* Gold on hover */
+        }
+
+        /* Submit Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #f39c12;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Patrick Hand', cursive; /* Apply Patrick Hand font */
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            box-shadow: 0 0 20px #f39c12;
+            transform: scale(1.05);
+        }
+    </style>
+    <script>
+        async function submitFeedback(event) {
+            event.preventDefault();
+
+            // Get Student_usn from local storage
+            const studentUsn = localStorage.getItem('usn');
+
+            // Get form data
+            const rating = document.querySelector('input[name="rating"]:checked');
+            const comments = document.getElementById('comments').value;
+
+            // Validate inputs
+            if (!studentUsn) {
+                alert('Student USN is not set. Please log in first.');
+                return;
+            }
+
+            if (!rating || !comments) {
+                alert('All fields are required.');
+                return;
+            }
+
+            // Create feedback object
+            const feedback = {
+                Student_usn: studentUsn,
+                Rating: parseInt(rating.value),
+                Comments: comments
+            };
+
+            try {
+                // Send feedback to the server
+                const response = await fetch('http://localhost:8000/submit-feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(feedback),
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Server response:', errorText);
+                    throw new Error(`Failed to submit feedback: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                alert('Feedback submitted successfully!');
+                console.log('Server result:', result);
+                document.getElementById('feedback-form').reset();
+            } catch (error) {
+                console.error('Error:', error.message);
+                alert('Failed to submit feedback. Please try again.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="feedback-card">
+        <h1>Submit Feedback</h1>
+        <form id="feedback-form" onsubmit="submitFeedback(event)">
+            <!-- Star Rating -->
+            <label for="rating">Rating:</label>
+            <div class="rating">
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1">★</label>
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2">★</label>
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3">★</label>
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4">★</label>
+                <input type="radio" id="star5" name="rating" value="5">
+                <label for="star5">★</label>
+            </div>
+
+            <!-- Comments Input -->
+            <label for="comments">Comments:</label>
+            <textarea id="comments" name="comments" rows="5" placeholder="Write your feedback here..." required></textarea>
+
+            <!-- Submit Button -->
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+</body>
+</html>

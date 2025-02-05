@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[disabled] {
+            background-color: #e9ecef;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Profile</h1>
+        <div id="errorMessage" class="error" style="display: none;">USN is missing or invalid!</div>
+        <form id="profileForm" style="display: none;">
+            <div class="form-group">
+                <label for="usn">USN</label>
+                <input type="text" id="usn" name="usn" disabled>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" disabled>
+            </div>
+            <div class="form-group">
+                <label for="dept">Department</label>
+                <input type="text" id="dept" name="dept" disabled>
+            </div>
+            <div class="form-group">
+                <label for="room">Room Number</label>
+                <input type="text" id="room" name="room" disabled>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" disabled>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact</label>
+                <input type="text" id="contact" name="contact" disabled>
+            </div>
+            <button type="button" id="editButton" class="btn" onclick="enableEditing()">Edit</button>
+            <button type="button" id="saveButton" class="btn" style="display: none;" onclick="updateProfile()">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const usn = localStorage.getItem('usn');
+            if (!usn) {
+                document.getElementById('errorMessage').innerText = 'USN not found. Please log in again.';
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8000/api/student/${usn}`);
+                const student = await response.json();
+
+                console.log(student); // Debugging: log API response
+
+                if (response.ok && student) {
+                    document.getElementById('usn').value = student.Student_usn || usn;
+                    document.getElementById('name').value = student.Name || '';
+                    document.getElementById('dept').value = student.Dept || '';
+                    document.getElementById('room').value = student.Room_no || '';
+                    document.getElementById('email').value = student.Email_id || '';
+                    document.getElementById('contact').value = student.Contact || '';
+                    document.getElementById('profileForm').style.display = 'block';
+                } else {
+                    document.getElementById('errorMessage').innerText = 'Error fetching profile data!';
+                    document.getElementById('errorMessage').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+                document.getElementById('errorMessage').innerText = 'Unable to fetch profile data. Please try again later.';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        });
+
+        function enableEditing() {
+            document.getElementById('room').disabled = false;
+            document.getElementById('contact').disabled = false;
+            document.getElementById('editButton').style.display = 'none';
+            document.getElementById('saveButton').style.display = 'block';
+        }
+
+        async function updateProfile() {
+            const usn = localStorage.getItem('usn');
+            const data = {
+                room: document.getElementById('room').value,
+                contact: document.getElementById('contact').value,
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8000/api/student/${usn}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    alert('Profile updated successfully!');
+                    document.getElementById('room').disabled = true;
+                    document.getElementById('contact').disabled = true;
+                    document.getElementById('editButton').style.display = 'block';
+                    document.getElementById('saveButton').style.display = 'none';
+                } else {
+                    const result = await response.json();
+                    alert(`Error updating profile: ${result.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Unable to update profile. Please try again later.');
+            }
+        }
+    </script>
+</body>
+</html>

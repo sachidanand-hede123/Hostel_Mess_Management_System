@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Deliveries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        .error {
+            text-align: center;
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Today's Deliveries</h1>
+    <div id="feedback"></div>
+    <table id="deliveriesTable">
+        <thead>
+            <tr>
+                <th>USN</th>
+                <th>Name</th>
+                <th>Room Number</th>
+                <th>Meal ID</th>
+                <th>Meal Type</th>
+            </tr>
+        </thead>
+        <tbody id="deliveriesBody">
+            <!-- Data will be populated here dynamically -->
+        </tbody>
+    </table>
+    <div id="status" class="loading">Loading data...</div>
+
+    <script>
+        // Fetch today's deliveries from the backend
+        async function fetchTodaysDeliveries() {
+            const statusElement = document.getElementById('status');
+            const deliveriesBody = document.getElementById('deliveriesBody');
+            const feedback = document.getElementById('feedback');
+    
+            try {
+                // Update the fetch URL to point to localhost:8000
+                const response = await fetch('http://localhost:8000/api/todays-deliveries');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch deliveries');
+                }
+    
+                const data = await response.json();
+    
+                if (data.length === 0) {
+                    statusElement.textContent = 'No deliveries for today.';
+                    return;
+                }
+    
+                // Clear the status
+                statusElement.textContent = '';
+    
+                // Populate table with data
+                data.forEach((delivery) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${delivery.usn}</td>
+                        <td>${delivery.Name}</td>
+                        <td>${delivery.Room_no}</td>
+                        <td>${delivery.meal_id}</td>
+                        <td>${delivery.meal_type}</td>
+                    `;
+                    deliveriesBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching deliveries:', error);
+                statusElement.textContent = '';
+                feedback.innerHTML = `<p class="error">Error loading data: ${error.message}</p>`;
+            }
+        }
+    
+        // Call the fetch function when the page loads
+        window.onload = fetchTodaysDeliveries;
+    </script>
+    
+</body>
+</html>

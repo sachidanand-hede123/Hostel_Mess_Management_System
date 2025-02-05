@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warden Intro UI</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: url('wback.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Navy Blue Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 25%;
+            height: 100%;
+            background: rgb(47, 47, 97);
+            border-top-left-radius: 50% 50%;
+            border-bottom-left-radius: 50% 50%;
+            z-index: -1;
+        }
+
+        h1 {
+            color: #ecedee;
+            font-size: 48px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                color: #ecedee;
+                transform: scale(1);
+            }
+            50% {
+                color: #fbd148;
+                transform: scale(1.1);
+            }
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #112b27;
+            color: #fff;
+            width: 260px;
+            height: 440px;
+            padding: 20px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.6s; /* New card delay */
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card img {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card .spacer {
+            flex-grow: 1;
+        }
+
+        .btn {
+            background-color: #fbd148;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #f9c536;
+        }
+
+        .btn-secondary {
+            margin-top: 10px;
+            background-color: #fbd148;
+            color: #000;
+            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f9c536;
+        }
+
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: 70px; /* Increased logo size */
+        }
+
+        .home {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #fbd148;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .home:hover {
+            background-color: #f9c536;
+        }
+    </style>
+</head>
+<body>
+    <img src="rvlogo.png" alt="Logo" class="logo">
+    <a href="#" class="home">Home</a>
+    <a href="../index.html" class="home">Sign Out</a>
+    <h1>Warden</h1>
+    <div class="container">
+       
+
+        <!-- Card 2 -->
+        <div class="card">
+            <img src="menu.png" alt="Menu Image">
+            <h2>Upload menu</h2>
+            <div class="spacer"></div>
+            <button class="btn" onclick="location.href='updatemenu.html'">Update</button>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card">
+            <img src="feed.png" alt="Feedback Image">
+            <h2>Review Feedback</h2>
+            <div class="spacer"></div>
+            <button class="btn btn-secondary" onclick="location.href='feedbackview.html'">View</button>
+        </div>
+         <!-- Card 1 (New Deliveries card) -->
+         <div class="card">
+            <img src="delivery.jpeg" alt="Delivery Image"> <!-- Replace with a delivery-related image -->
+            <h2>Deliveries</h2>
+            <div class="spacer"></div>
+            <button class="btn" onclick="location.href='deliverycheck.html'">Manage</button>
+        </div>
+    </div>
+</body>
+</html>

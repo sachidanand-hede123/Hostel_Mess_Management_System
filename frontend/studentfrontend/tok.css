@@ -1,0 +1,198 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Patrick Hand', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-image: -webkit-linear-gradient(top, #5fbc5f 0%, #419641 100%);
+  background-image: -o-linear-gradient(top, #499249 0%, #419641 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#65d965), to(#57b757));
+  background-image: linear-gradient(to bottom, #54a754 0%, #419641 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff419641', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  background-repeat: no-repeat;
+}
+
+.top-buttons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.top-button {
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #424447;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.top-button:hover {
+  background-color: #0056b3;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.main-heading {
+  font-family: 'Bookman Old Style', serif;
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(10, 9, 9, 0.6);
+  margin-bottom: 20px;
+}
+
+.book {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 900px;
+  height: 500px;
+  position: relative;
+  transform: perspective(1000px) rotateY(0deg) rotateX(10deg);
+  transform-style: preserve-3d;
+}
+
+.left-page, .right-page {
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 16px 0 16px 0;
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.left-page {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  transform: rotateY(-5deg);
+  transform-origin: left;
+  box-shadow: inset -4px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo span {
+  display: block;
+}
+
+.right-card-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.right-card-heading {
+  font-family: 'Patrick Hand', serif;
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.right-card-text {
+  font-family: 'Patrick Hand', sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.delivery-button {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #6aa05a;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.delivery-button:hover {
+  background-color: #19e619;
+}
+
+.button-container {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.generate-token-btn {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #808080;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.generate-token-btn:hover {
+  background-color: #666666;
+}
+
+.secondary-button {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.secondary-button:hover {
+  background-color: #3e8e41;
+}
+
+#success-message {
+  text-align: center;
+  font-family: 'Patrick Hand', sans-serif;
+  font-size: 18px;
+  color: #333;
+  margin-top: 15px;
+  line-height: 1.5;
+}

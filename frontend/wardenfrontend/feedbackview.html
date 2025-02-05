@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .feedback-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .feedback {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .feedback h3 {
+            margin: 0;
+            color: #007BFF;
+        }
+        .feedback p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .feedback .date {
+            font-size: 0.9em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <h1>Feedback Viewer</h1>
+    <div class="feedback-container" id="feedbackContainer"></div>
+
+    <script>
+        async function fetchFeedback() {
+            try {
+                const response = await fetch('http://localhost:8000/api/feedback');
+                if (!response.ok) throw new Error('Failed to fetch feedback.');
+
+                const feedbackList = await response.json();
+                const container = document.getElementById('feedbackContainer');
+                container.innerHTML = '';
+
+                feedbackList.forEach(feedback => {
+                    const feedbackDiv = document.createElement('div');
+                    feedbackDiv.className = 'feedback';
+
+                    feedbackDiv.innerHTML = `
+                        <h3>USN: ${feedback.Student_usn}</h3>
+                        <p>Rating: ${feedback.Rating}</p>
+                        <p>${feedback.Comments}</p>
+                        <p class="date">Date: ${new Date(feedback.Date).toDateString()}</p>
+                    `;
+
+                    container.appendChild(feedbackDiv);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackContainer').innerHTML =
+                    '<p style="color: red;">Failed to load feedback.</p>';
+            }
+        }
+
+        // Fetch feedback on page load
+        fetchFeedback();
+    </script>
+</body>
+</html>
