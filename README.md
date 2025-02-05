@@ -66,35 +66,42 @@ For any queries, feel free to contact us via [GitHub Issues](https://github.com/
 - *MySQL*: A MySQL database server is required to run the system.
 - *Node.js*: The backend server is powered by Node.js, which you need to have installed.
 
+
+
+
+
 ---
 
-Steps to Run
+## Steps to Run
 
-Import Database:
+1. **Import Database**:
+   - Import `db.sql` in MySQL to create the database and necessary tables.
 
-Import db.sql in MySQL to create the database and necessary tables.
+2. **Download npm Dependencies**:
+   - Run the following command in your project folder to install all the required dependencies from the `package.json` file:
+     
+     ```sh
+     npm install
+     ```
 
-Download npm Dependencies:
+3. **Configure MySQL Credentials**:
+   - Update your MySQL username and password in the `db.js` file to ensure proper database connection.
 
-Run the following command in your project folder to install all the required dependencies from the package.json file:
+4. **Start the Server**:
+   - Open the terminal and enter the following command to start the server:
+     
+     ```sh
+     npm start server
+     ```
+   - Ensure that MySQL is running before starting the server.
 
-npm install
+5. **Start Frontend**:
+   - Once the server is running, navigate to the frontend folder, open `index.html`, and use the "Go Live" feature in your editor to view the frontend.
 
-Configure MySQL Credentials:
+---
 
-Update your MySQL username and password in the db.js file to ensure proper database connection.
+### 📸 Photos
 
-Start the Server:
-
-Open the terminal and enter the following command to start the server:
-
-npm start server
-
-Ensure that MySQL is running before starting the server.
-
-Start Frontend:
-
-Once the server is running, navigate to the frontend folder, open index.html, and use the "Go Live" feature in your editor to view the frontend.
 
 For more details, visit the [GitHub repository](https://github.com/sachidanand-hede123/Hostel_Mess_Management_System).
 
