@@ -68,31 +68,32 @@ For any queries, feel free to contact us via [GitHub Issues](https://github.com/
 
 ---
 
-## Steps to Run
+Steps to Run
+Import Database:
 
-1. *Import Database*:
-   - Import db.sql in MySQL to create the database and necessary tables.
+Import db.sql in MySQL to create the database and necessary tables.
+Download npm Dependencies:
 
-2. *Download npm Dependencies*:
-   - Run the following command in your project folder to install all the required dependencies from the package.json file:
-     
-     npm install "   "
-     
+Run the following command in your project folder to install all the required dependencies from the package.json file:
+nginx
+Copy
+Edit
+npm install
+Configure MySQL Credentials:
 
-3. *Configure MySQL Credentials*:
-   - Update your MySQL username and password in the db.js file to ensure proper database connection.
+Update your MySQL username and password in the db.js file to ensure proper database connection.
+Start the Server:
 
-4. *Start the Server*:
-   - Open the terminal and enter the following command to start the server:
-     
-     npm start server
-     
-   - Ensure that MySQL is running before starting the server.
+Open the terminal and enter the following command to start the server:
+sql
+Copy
+Edit
+npm start
+Ensure that MySQL is running before starting the server.
+Start Frontend:
 
-5. *Start Frontend*:
-   - Once the server is running, navigate to the frontend folder, open index.html, and use the "Go Live" feature in your editor to view the frontend.
-
- 
+Once the server is running, navigate to the frontend folder, open index.html, and use the "Go Live" feature in your editor to view the frontend.
+For more details, visit the GitHub repository. 
  Photos-
 ![WhatsApp Image 2025-01-17 at 02 36 17_a7376b4b](https://github.com/user-attachments/assets/f32603b3-a6a5-4b2d-835a-d6fa20dd5327)
 ![WhatsApp Image 2025-01-17 at 02 34 52_23dd9946](https://github.com/user-attachments/assets/c00e36dc-4929-4587-aff6-491a41da2d35)
